@@ -15,12 +15,12 @@ class ReportZipWizard(models.TransientModel):
         self.zip_file_name = 'reports.zip'
 
     def get_report_filename(self, source_model, record_id, report_name):
-        ''' A generif function for naming individual report files inside
+        ''' A generic function for naming individual report files inside
         the ZIP archive. Override and customize this function as necessary. '''
 
         report_prefix = report_name.lower().replace(' ', '_')
-        # Remove slashes to avoid creating subdirs inside zip. Use object ID
-        # as a fallback in case there is no name defined
+        ''' Remove slashes to avoid creating subdirs inside the zip file.
+        Use object ID as a fallback in case there is no name defined '''
         active_object = self.env[source_model].browse(record_id)
         object_name = active_object.name and active_object.name.replace('/', '-') or str(active_object.id)
         filetype_suffix = 'pdf'
@@ -51,7 +51,7 @@ class ReportZipWizard(models.TransientModel):
                 report_filename = self.get_report_filename(self.source_model, record_id, report_name)
                 report_zip.writestr(report_filename, result)
 
-        ''' Attach the ready zip file to the wizard '''
+        ''' Attach the completed zip file to the wizard '''
         self.zip_file = base64.b64encode(in_memory_zip.getvalue())
 
         ''' Update the wizard's state and relaunch it, now showing the download link '''

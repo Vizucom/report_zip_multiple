@@ -15,17 +15,30 @@
 {
     'name': 'Zip Multiple Reports',
     'category': 'Utilities',
-    'version': '0.1',
+    'version': '1.0',
     'author': 'Vizucom Oy',
     'website': 'http://www.vizucom.com',
-    'depends': ['report', 'account'],
+    'depends': ['report'],
     'description': """
 Zip Multiple Reports
 ====================
-* WIP...
+* Creates a generic wizard for selecting multiple records, rendering their PDF reports and placing them inside a single ZIP file for the user to download
+* Does not directly add the functionality to any Odoo object, so you will need to inherit this module to add the wizard to e.g. Purchase Orders or Invoices.
+* Works also with Aeroo reports
 
+Usage
+-----
+* In your custom module, inherit this module and create a new action to a model of your choice, e.g.::
+
+    <act_window id="action_account_invoice_zip"
+                multi="True" key2="client_action_multi" name="Create ZIP file"
+                res_model="report.zip.wizard" src_model="account.invoice"
+                view_mode="form" target="new" view_type="form"
+                context="{'default_source_model': context.get('active_model') }" />
+
+* Check the boxes in your object's treeview, and click More --> Create ZIP file to launch the wizard.
 """,
     'data': [
-        'views/account_invoice.xml',
+        'views/report_zip_wizard.xml',
     ],
 }
